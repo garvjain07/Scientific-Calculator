@@ -1,0 +1,16 @@
+/* Smooth reveal animation used by content cards. */
+@keyframes floatIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.985);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.glass-panel {
+  animation: floatIn 300ms ease both;
+}
