@@ -22,29 +22,29 @@ function ThemeControls({ theme, onThemeChange, accent, onAccentChange }) {
   }, [])
 
   return (
-    <div className="flex flex-wrap items-center gap-1">
+    <div className="flex flex-wrap items-center gap-0.5 xl:gap-1">
       <button
         type="button"
         onClick={() => onThemeChange(theme === 'dark' ? 'light' : 'dark')}
-        className="tab-button rounded-lg border border-white/20 bg-white/10 p-1.5 dark:border-white/10 dark:bg-black/20"
+        className="tab-button rounded-lg border border-white/20 bg-white/10 p-1 xl:p-1.5 dark:border-white/10 dark:bg-black/20"
         title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
         aria-label={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
       >
-        {theme === 'dark' ? <Sun className="h-3.5 w-3.5" /> : <Moon className="h-3.5 w-3.5" />}
+        {theme === 'dark' ? <Sun className="h-3 w-3 xl:h-3.5 xl:w-3.5" /> : <Moon className="h-3 w-3 xl:h-3.5 xl:w-3.5" />}
       </button>
 
       <div ref={paletteRef} className="relative">
         <button
           type="button"
           onClick={() => setIsPaletteOpen((current) => !current)}
-          className="flex items-center gap-1 rounded-lg border border-white/20 bg-white/10 px-1.5 py-1 dark:border-white/10 dark:bg-black/20"
+          className="flex items-center gap-0.5 rounded-lg border border-white/20 bg-white/10 px-1 py-0.5 xl:gap-1 xl:px-1.5 xl:py-1 dark:border-white/10 dark:bg-black/20"
           title="Choose accent color"
           aria-expanded={isPaletteOpen}
           aria-label="Choose accent color"
         >
-          <Palette className="h-3.5 w-3.5" />
+          <Palette className="h-3 w-3 xl:h-3.5 xl:w-3.5" />
           <span
-            className="h-4 w-4 rounded-full border border-white/70"
+            className="h-3.5 w-3.5 rounded-full border border-white/70 xl:h-4 xl:w-4"
             style={{ backgroundColor: accent }}
             aria-hidden="true"
           />

@@ -114,9 +114,9 @@ function CalculatorPanel() {
   }
 
   return (
-    <section className="grid h-full gap-2 md:min-h-0 xl:grid-cols-[1fr_280px]">
+    <section className="mobile-calc-section grid h-full min-h-0 gap-1.5 xl:gap-2 xl:grid-cols-[1fr_280px]">
       <div className="min-h-0">
-        <div className="glass-panel flex h-full min-h-0 flex-col p-2.5 sm:p-3">
+        <div className="mobile-calc-shell glass-panel flex h-full min-h-0 flex-col p-2 xl:p-3">
           <div className="mb-1.5 flex flex-wrap items-center justify-between gap-1.5">
             <p className="badge">Angle: {state.angleMode}</p>
             <p className="badge">Memory: {state.memory}</p>
@@ -125,7 +125,7 @@ function CalculatorPanel() {
           <div className="mb-1.5">
             <input
               ref={inputRef}
-              className="neumorph-btn w-full rounded-xl px-3 py-1 text-sm sm:text-base"
+              className="app-expression-input neumorph-btn w-full rounded-xl px-3 py-1 text-sm sm:text-base"
               placeholder="Type expression like 2+3*sin(45)"
               value={state.expression}
               onChange={(event) => setExpression(event.target.value)}
@@ -135,23 +135,36 @@ function CalculatorPanel() {
             />
           </div>
 
-          <CalculatorDisplay
-            expression={state.expression}
-            preview={state.preview}
-            error={state.error}
-            result={state.result}
-            onCopy={copyResult}
-            onVoiceToggle={startVoiceInput}
-            isVoiceActive={isVoiceActive}
-          />
+          <div className="mobile-top-row mb-1.5 grid min-h-0 grid-cols-[minmax(0,1fr)_96px] gap-1.5 xl:block xl:h-auto">
+            <CalculatorDisplay
+              className="h-full"
+              expression={state.expression}
+              preview={state.preview}
+              error={state.error}
+              result={state.result}
+              onCopy={copyResult}
+              onVoiceToggle={startVoiceInput}
+              isVoiceActive={isVoiceActive}
+            />
 
-          <div className="mt-1.5 min-h-0 flex-1 overflow-hidden">
+            <HistoryPanel
+              compact
+              className="xl:hidden"
+              history={state.history}
+              onReuse={setExpression}
+              onClear={clearHistory}
+              onExport={() => exportHistoryAsCsv(state.history)}
+            />
+          </div>
+
+          <div className="mobile-keypad-wrap mt-1.5 min-h-0 flex-1 overflow-hidden">
             <CalculatorKeypad onAction={handleKeyAction} />
           </div>
         </div>
       </div>
 
       <HistoryPanel
+        className="hidden xl:flex"
         history={state.history}
         onReuse={setExpression}
         onClear={clearHistory}

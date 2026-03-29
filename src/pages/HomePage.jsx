@@ -35,28 +35,28 @@ function HomePage() {
   }, [activeView])
 
   return (
-    <main className="min-h-screen overflow-y-auto px-1.5 py-1.5 md:h-screen md:overflow-hidden sm:px-2 sm:py-2">
-      <div className="mx-auto flex min-h-screen w-full max-w-none flex-col gap-1 md:h-full md:min-h-0">
+    <main className="h-dvh min-h-dvh overflow-hidden px-0 py-0 xl:min-h-screen xl:overflow-y-auto xl:px-2 xl:py-2">
+      <div className="mobile-calc-frame mx-auto flex h-full min-h-0 w-full flex-col gap-0 xl:gap-1 xl:max-w-none">
         <motion.header
-          className="glass-panel relative z-40 flex items-center justify-between gap-2 px-2 py-1 sm:px-2.5 sm:py-1.5"
+          className="app-header glass-panel relative z-40 flex items-center justify-between gap-1.5 px-1.5 py-1 xl:gap-2 xl:px-2.5 xl:py-1.5"
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45 }}
         >
-          <div className="flex min-w-0 items-center gap-2">
+          <div className="flex min-w-0 items-center gap-1.5 xl:gap-2">
             <img
               src={brandLogo}
               alt="Adinath Group logo"
-              className="h-8 w-8 rounded-full object-cover sm:h-9 sm:w-9"
+              className="app-header-logo h-7 w-7 rounded-full object-cover xl:h-9 xl:w-9"
             />
             <div className="min-w-0">
-              <p className="text-[9px] uppercase tracking-[0.18em] text-(--muted-text)">Adinath Group</p>
-              <h1 className="truncate text-base font-semibold sm:text-lg">Scientific Calculator</h1>
+              <p className="app-header-brand text-[8px] uppercase tracking-[0.14em] text-(--muted-text) xl:text-[9px] xl:tracking-[0.18em]">Adinath Group</p>
+              <h1 className="app-header-title truncate text-sm font-semibold xl:text-lg">Scientific Calculator</h1>
             </div>
           </div>
 
-          <div className="flex items-center gap-1.5">
-            <div className="flex items-center gap-1 rounded-xl border border-white/20 bg-white/10 p-0.5 dark:border-white/10 dark:bg-black/20">
+          <div className="flex items-center gap-1 xl:gap-1.5">
+            <div className="flex items-center gap-0.5 rounded-xl border border-white/20 bg-white/10 p-0.5 xl:gap-1 dark:border-white/10 dark:bg-black/20">
               {views.map((view) => {
                 const Icon = view.icon
 
@@ -67,8 +67,8 @@ function HomePage() {
                     onClick={() => setActiveView(view.id)}
                     type="button"
                   >
-                    <Icon className="h-3.5 w-3.5" />
-                    <span className="hidden sm:inline">{view.label}</span>
+                    <Icon className="h-3 w-3 xl:h-3.5 xl:w-3.5" />
+                    <span className="hidden xl:inline">{view.label}</span>
                   </button>
                 )
               })}
@@ -80,7 +80,7 @@ function HomePage() {
         <AnimatePresence mode="wait">
           <motion.section
             key={activeView}
-            className="flex-1 md:min-h-0 md:overflow-hidden"
+            className="flex-1 min-h-0 overflow-hidden"
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
@@ -90,7 +90,7 @@ function HomePage() {
           </motion.section>
         </AnimatePresence>
 
-        <footer className="glass-panel px-3 py-1.5 text-center text-xs text-(--muted-text)">
+        <footer className="glass-panel hidden px-3 py-1.5 text-center text-xs text-(--muted-text) xl:block">
           <p>
             &copy; 2026 Adinath Group. All rights are reserved | Contact{' '}
             <a className="text-(--accent-color) underline" href="mailto:jaingroup008@gmail.com">

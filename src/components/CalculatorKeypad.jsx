@@ -12,30 +12,33 @@ const kindStyles = {
 
 // Renders responsive scientific keypad and forwards button actions.
 function CalculatorKeypad({ onAction }) {
-  const labelToButton = Object.fromEntries(scientificButtons.map((button) => [button.label, button]))
+  const allButtons = [...scientificButtons, ...basicPadRows.flat()]
+  const labelToButton = Object.fromEntries(allButtons.map((button) => [button.label, button]))
 
-  const memoryButtons = ['MC', 'MR', 'M+', 'M-'].map((label) => labelToButton[label]).filter(Boolean)
-  const trigButtons = ['sin', 'cos', 'tan', 'sin⁻¹', 'cos⁻¹', 'tan⁻¹'].map((label) => labelToButton[label]).filter(Boolean)
-  const logButtons = ['Deg/Rad', 'log', 'logₓ', 'ln x'].map((label) => labelToButton[label]).filter(Boolean)
-  const xButtons = ['x²', 'x³', 'xʸ', '1/x', '10ˣ'].map((label) => labelToButton[label]).filter(Boolean)
-
-  // Requested custom utility matrix:
-  // ( ) AC
-  // root1 n! CE
-  // root2 pi e
-  // root3 backspace(backspace takes two button spaces)
-  const utilityRows = [
-    ['(', ')', 'AC'],
-    ['ⁿ√x', 'n!', 'CE'],
-    ['√', 'π', 'e'],
-    ['∛', '⌫'],
+  const mobileRows = [
+    ['MC', 'MR', 'M+', 'M-', 'Deg/Rad', 'AC'],
+    ['sin', 'cos', 'tan', 'sin⁻¹', 'cos⁻¹', 'tan⁻¹'],
+    ['x²', 'x³', 'xʸ', '1/x', '10ˣ', '⌫'],
+    ['CE', 'e', '(', ')', '%', '/'],
+    ['logₓ', 'π', '7', '8', '9', '×'],
+    ['ln x', '√', '4', '5', '6', '−'],
+    ['log', '∛', '1', '2', '3', '+'],
+    ['n!', 'ⁿ√x', '00', '0', '.', '='],
   ]
 
-  const renderButton = (button, key) => (
+  const desktopRows = [
+    ['Deg/Rad', 'sin', 'sin⁻¹', 'x²', 'n!', 'AC', '×', '1', '2', '3'],
+    ['MC', 'cos', 'cos⁻¹', 'x³', '(', ')', '/', '4', '5', '6'],
+    ['MR', 'tan', 'tan⁻¹', 'xʸ', 'ⁿ√x', 'CE', '+', '7', '8', '9'],
+    ['M+', 'log', 'ln x', '1/x', '√', 'π', '−', '00', '0', '.'],
+    ['M-', 'logₓ', 'e', '10ˣ', '∛', '⌫', '%', { label: '=', span: 3 }],
+  ]
+
+  const renderButton = (button, key, extraClass = '') => (
     <motion.button
       key={key}
       type="button"
-      className={`neumorph-btn h-7 rounded-lg px-1 text-[11px] font-semibold sm:h-full sm:min-h-11 sm:text-base ${button.fullRow ? 'col-span-3' : ''} ${button.span2 ? 'col-span-2' : ''} ${['+', '−', '×', '/', '%'].includes(button.label) ? 'text-base font-extrabold sm:text-2xl' : ''} ${kindStyles[button.kind]}`}
+      className={`neumorph-btn calc-key-btn rounded-md font-semibold ${extraClass} ${['+', '−', '×', '/', '%'].includes(button.label) ? 'calc-key-op font-extrabold' : ''} ${kindStyles[button.kind]}`}
       onClick={() => onAction(button)}
       whileTap={{ scale: 0.96 }}
     >
@@ -43,53 +46,38 @@ function CalculatorKeypad({ onAction }) {
     </motion.button>
   )
 
+  const renderRow = (row, rowIndex, prefix) =>
+    row.map((cell, buttonIndex) => {
+      if (!cell) {
+        return <div key={`${prefix}-empty-${rowIndex}-${buttonIndex}`} aria-hidden="true" />
+      }
+
+      const label = typeof cell === 'string' ? cell : cell.label
+      const span = typeof cell === 'string' ? 1 : cell.span ?? 1
+      const spanClass = span === 3 ? 'col-span-3' : span === 2 ? 'col-span-2' : ''
+      const button = labelToButton[label]
+
+      if (!button) {
+        return <div key={`${prefix}-missing-${rowIndex}-${buttonIndex}`} aria-hidden="true" />
+      }
+
+      return renderButton(button, `${prefix}-${rowIndex}-${buttonIndex}-${label}`, spanClass)
+    })
+
   return (
-    <div className="grid gap-1 xl:h-full xl:gap-2 xl:grid-cols-[110px_120px_1fr_340px]">
-      <div className="grid auto-rows-auto grid-cols-2 gap-1 sm:auto-rows-fr sm:grid-cols-4 xl:h-full xl:grid-cols-1 sm:gap-1.5">
-        {memoryButtons.map((button, index) => renderButton(button, `memory-${button.label}-${index}`))}
+    <div className="grid gap-1.5 xl:h-full">
+      <div className="grid grid-cols-6 gap-1.5 xl:hidden">
+        {mobileRows.map((row, rowIndex) => (
+          <div key={`mobile-row-${rowIndex}`} className="contents">
+            {renderRow(row, rowIndex, 'mobile')}
+          </div>
+        ))}
       </div>
 
-      <div className="grid auto-rows-auto grid-cols-2 gap-1 sm:auto-rows-fr sm:grid-cols-3 xl:h-full xl:grid-cols-1 sm:gap-1.5">
-        {trigButtons.map((button, index) => renderButton(button, `trig-${button.label}-${index}`))}
-      </div>
-
-      <div className="grid gap-1 sm:gap-1.5 md:grid-cols-[110px_110px_1fr] xl:h-full">
-        <div className="grid auto-rows-auto grid-cols-1 gap-1 sm:auto-rows-fr sm:gap-1.5 xl:h-full">
-          {logButtons.map((button, index) => renderButton(button, `log-${button.label}-${index}`))}
-        </div>
-
-        <div className="grid auto-rows-auto grid-cols-1 gap-1 sm:auto-rows-fr sm:gap-1.5 xl:h-full">
-          {xButtons.map((button, index) => renderButton(button, `x-${button.label}-${index}`))}
-        </div>
-
-        <div className="grid grid-rows-[auto_auto_auto_auto] auto-rows-auto gap-1 sm:auto-rows-fr sm:gap-1.5 xl:h-full">
-          {utilityRows.map((row, rowIndex) => (
-            <div key={`utility-row-${rowIndex}`} className="grid grid-cols-3 gap-1 sm:gap-1.5">
-              {row.map((label, buttonIndex) => {
-                const button = labelToButton[label]
-
-                if (!button) {
-                  return <div key={`empty-${rowIndex}-${buttonIndex}`} />
-                }
-
-                return renderButton(button, `utility-${rowIndex}-${buttonIndex}-${label}`)
-              })}
-            </div>
-          ))}
-        </div>
-      </div>
-
-      <div className="grid auto-rows-auto gap-1 sm:auto-rows-fr sm:gap-1.5 xl:h-full">
-        <div className="grid grid-cols-5 gap-1 sm:gap-1.5 xl:h-full">
-          {basicPadRows[0].map((button, index) => renderButton(button, `basic-row-0-${index}`))}
-        </div>
-
-        {basicPadRows.slice(1).map((row, rowIndex) => (
-          <div
-            key={`basic-row-${rowIndex + 1}`}
-            className={`grid gap-1 sm:gap-1.5 ${row.length === 1 ? 'grid-cols-1' : row.length === 4 ? 'grid-cols-4' : 'grid-cols-3'}`}
-          >
-            {row.map((button, index) => renderButton(button, `basic-row-${rowIndex + 1}-${index}`))}
+      <div className="calc-key-grid-desktop hidden xl:grid xl:grid-cols-10 xl:h-full xl:auto-rows-fr gap-1.5">
+        {desktopRows.map((row, rowIndex) => (
+          <div key={`desktop-row-${rowIndex}`} className="contents">
+            {renderRow(row, rowIndex, 'desktop')}
           </div>
         ))}
       </div>

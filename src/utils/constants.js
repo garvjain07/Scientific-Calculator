@@ -60,7 +60,6 @@ export const basicPadRows = [
     { label: '00', value: '00', kind: 'number' },
     { label: '0', value: '0', kind: 'number' },
     { label: '.', value: '.', kind: 'number' },
-    { label: ',', value: ',', kind: 'operator' },
   ],
   [
     { label: '=', action: 'EVALUATE', kind: 'equal', fullRow: true },
