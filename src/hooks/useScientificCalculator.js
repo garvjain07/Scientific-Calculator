@@ -157,6 +157,11 @@ export function useScientificCalculator() {
         target instanceof HTMLElement &&
         (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA' || target.isContentEditable)
 
+      // Let native editing keys work inside form fields to avoid double-deletes.
+      if (isEditableTarget) {
+        return
+      }
+
       if (event.key === 'Enter') {
         event.preventDefault()
         evaluateCurrent()
@@ -170,11 +175,6 @@ export function useScientificCalculator() {
 
       if (event.key === 'Escape') {
         dispatch({ type: 'CLEAR' })
-        return
-      }
-
-      // Avoid double writes when the user is typing directly in input fields.
-      if (isEditableTarget) {
         return
       }
 
