@@ -1,14 +1,16 @@
-import { useCallback, useRef } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { RotateCcw } from 'lucide-react'
 import { exportHistoryAsCsv } from '../services/csvService'
 import { useScientificCalculator } from '../hooks/useScientificCalculator'
 import CalculatorDisplay from './CalculatorDisplay'
 import CalculatorKeypad from './CalculatorKeypad'
 import HistoryPanel from './HistoryPanel'
 
-// Composes calculator UI with memory, history, keyboard, and voice controls.
+// Composes calculator UI with memory, history, and keyboard controls.
 function CalculatorPanel() {
   const inputRef = useRef(null)
   const caretRef = useRef(0)
+  const [isHistoryVisible, setIsHistoryVisible] = useState(false)
 
   const {
     state,
@@ -20,9 +22,12 @@ function CalculatorPanel() {
     toggleAngle,
     runMemory,
     clearHistory,
-    startVoiceInput,
-    isVoiceActive,
   } = useScientificCalculator()
+
+  // Keep history hidden by default after reloads/hot updates.
+  useEffect(() => {
+    setIsHistoryVisible(false)
+  }, [])
 
   const syncCaret = useCallback(() => {
     const input = inputRef.current
@@ -114,12 +119,26 @@ function CalculatorPanel() {
   }
 
   return (
-    <section className="mobile-calc-section grid h-full min-h-0 gap-1.5 xl:gap-2 xl:grid-cols-[1fr_280px]">
+    <section
+      className={`mobile-calc-section grid h-full min-h-0 gap-1.5 xl:gap-2 ${isHistoryVisible ? 'xl:grid-cols-[1fr_280px]' : ''}`.trim()}
+    >
       <div className="min-h-0">
         <div className="mobile-calc-shell glass-panel flex h-full min-h-0 flex-col p-2 xl:p-3">
           <div className="mb-1.5 flex flex-wrap items-center justify-between gap-1.5">
             <p className="badge">Angle: {state.angleMode}</p>
-            <p className="badge">Memory: {state.memory}</p>
+            <div className="flex items-center gap-1.5">
+              <p className="badge">Memory: {state.memory}</p>
+              <button
+                type="button"
+                className="neumorph-btn inline-flex h-7 w-7 items-center justify-center rounded-full"
+                onClick={() => setIsHistoryVisible((previous) => !previous)}
+                title={isHistoryVisible ? 'Hide History' : 'Show History'}
+                aria-label={isHistoryVisible ? 'Hide History' : 'Show History'}
+                aria-expanded={isHistoryVisible}
+              >
+                <RotateCcw className="h-3.5 w-3.5" />
+              </button>
+            </div>
           </div>
 
           <div className="mb-1.5">
@@ -135,7 +154,9 @@ function CalculatorPanel() {
             />
           </div>
 
-          <div className="mobile-top-row mb-1.5 grid min-h-0 grid-cols-[minmax(0,1fr)_96px] gap-1.5 xl:block xl:h-auto">
+          <div
+            className={`mobile-top-row mb-1.5 grid min-h-0 gap-1.5 xl:block xl:h-auto ${isHistoryVisible ? 'grid-cols-[minmax(0,1fr)_96px]' : 'grid-cols-1'}`.trim()}
+          >
             <CalculatorDisplay
               className="h-full"
               expression={state.expression}
@@ -143,18 +164,18 @@ function CalculatorPanel() {
               error={state.error}
               result={state.result}
               onCopy={copyResult}
-              onVoiceToggle={startVoiceInput}
-              isVoiceActive={isVoiceActive}
             />
 
-            <HistoryPanel
-              compact
-              className="xl:hidden"
-              history={state.history}
-              onReuse={setExpression}
-              onClear={clearHistory}
-              onExport={() => exportHistoryAsCsv(state.history)}
-            />
+            {isHistoryVisible && (
+              <HistoryPanel
+                compact
+                className="xl:hidden"
+                history={state.history}
+                onReuse={setExpression}
+                onClear={clearHistory}
+                onExport={() => exportHistoryAsCsv(state.history)}
+              />
+            )}
           </div>
 
           <div className="mobile-keypad-wrap mt-1.5 min-h-0 flex-1 overflow-hidden">
@@ -163,13 +184,15 @@ function CalculatorPanel() {
         </div>
       </div>
 
-      <HistoryPanel
-        className="hidden xl:flex"
-        history={state.history}
-        onReuse={setExpression}
-        onClear={clearHistory}
-        onExport={() => exportHistoryAsCsv(state.history)}
-      />
+      {isHistoryVisible && (
+        <HistoryPanel
+          className="hidden xl:flex"
+          history={state.history}
+          onReuse={setExpression}
+          onClear={clearHistory}
+          onExport={() => exportHistoryAsCsv(state.history)}
+        />
+      )}
     </section>
   )
 }

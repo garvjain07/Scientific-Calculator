@@ -1,8 +1,8 @@
 import { motion } from 'framer-motion'
-import { Copy, Mic, MicOff } from 'lucide-react'
+import { Copy } from 'lucide-react'
 
 // Shows expression, result preview, and quick actions.
-function CalculatorDisplay({ expression, preview, error, result, onCopy, onVoiceToggle, isVoiceActive, className = '' }) {
+function CalculatorDisplay({ expression, preview, error, result, onCopy, className = '' }) {
   return (
     <motion.section
       className={`app-display-panel glass-panel flex min-h-24 flex-col justify-between gap-1.5 p-2.5 ${className}`.trim()}
@@ -17,9 +17,6 @@ function CalculatorDisplay({ expression, preview, error, result, onCopy, onVoice
         <div className="flex gap-2">
           <button type="button" className="app-display-action-btn neumorph-btn rounded-xl p-1.5" onClick={onCopy} title="Copy Result">
             <Copy className="h-3.5 w-3.5" />
-          </button>
-          <button type="button" className="app-display-action-btn neumorph-btn rounded-xl p-1.5" onClick={onVoiceToggle} title="Voice Input">
-            {isVoiceActive ? <MicOff className="h-3.5 w-3.5 text-red-400" /> : <Mic className="h-3.5 w-3.5" />}
           </button>
         </div>
       </div>

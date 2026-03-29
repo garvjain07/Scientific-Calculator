@@ -1,7 +1,6 @@
-import { useEffect, useMemo, useReducer, useState } from 'react'
+import { useEffect, useMemo, useReducer } from 'react'
 import { evaluateExpression } from '../utils/calculatorEngine'
 import { getStoredHistory, saveHistory } from '../services/storageService'
-import { startVoiceCapture } from '../services/voiceService'
 
 const initialState = {
   expression: '',
@@ -123,7 +122,6 @@ function reducer(state, action) {
 // Encapsulates calculator business logic and interaction handlers.
 export function useScientificCalculator() {
   const [state, dispatch] = useReducer(reducer, initialState)
-  const [voiceSession, setVoiceSession] = useState(null)
 
   const expressionToEvaluate = useMemo(() => state.expression || state.result, [state.expression, state.result])
 
@@ -235,39 +233,6 @@ export function useScientificCalculator() {
     dispatch({ type: 'MEMORY_SET', payload: Number(newMemory.toFixed(8)) })
   }
 
-  // Starts optional speech-to-text and appends transcript into expression input.
-  function startVoiceInput() {
-    if (voiceSession) {
-      voiceSession.stop()
-      setVoiceSession(null)
-      return
-    }
-
-    const recognition = startVoiceCapture(
-      (text) => {
-        const normalizedSpeech = text
-          .toLowerCase()
-          .replace(/plus/g, '+')
-          .replace(/minus/g, '-')
-          .replace(/into|times/g, '×')
-          .replace(/divided by/g, '÷')
-          .replace(/power/g, '^')
-          .replace(/ /g, '')
-
-        dispatch({ type: 'APPEND', payload: normalizedSpeech })
-        setVoiceSession(null)
-      },
-      (errorMessage) => {
-        dispatch({ type: 'SET_ERROR', payload: errorMessage })
-        setVoiceSession(null)
-      },
-    )
-
-    if (recognition) {
-      setVoiceSession(recognition)
-    }
-  }
-
   return {
     state,
     append: (value) => dispatch({ type: 'APPEND', payload: value }),
@@ -278,7 +243,5 @@ export function useScientificCalculator() {
     toggleAngle: () => dispatch({ type: 'TOGGLE_ANGLE' }),
     runMemory,
     clearHistory: () => dispatch({ type: 'CLEAR_HISTORY' }),
-    startVoiceInput,
-    isVoiceActive: Boolean(voiceSession),
   }
 }

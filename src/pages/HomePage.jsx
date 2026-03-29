@@ -90,7 +90,7 @@ function HomePage() {
           </motion.section>
         </AnimatePresence>
 
-        <footer className="glass-panel hidden px-3 py-1.5 text-center text-xs text-(--muted-text) xl:block">
+        <footer className="app-conditional-footer glass-panel hidden px-3 py-1.5 text-center text-xs text-(--muted-text)">
           <p>
             &copy; 2026 Adinath Group. All rights are reserved | Contact{' '}
             <a className="text-(--accent-color) underline" href="mailto:jaingroup008@gmail.com">

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { Eraser, RotateCcw } from 'lucide-react'
 import { converterCategories, converterOptions, convertValue } from '../utils/converter'
 
@@ -12,7 +12,7 @@ function UnitConverter() {
   const [fromUnit, setFromUnit] = useState(defaultUnits[0])
   const [toUnit, setToUnit] = useState(defaultUnits[1])
   const [fromValue, setFromValue] = useState('1')
-  const [toValue, setToValue] = useState(() => convertValue(defaultCategory, defaultUnits[0], defaultUnits[1], '1'))
+  const [toValue, setToValue] = useState('')
   const [lastEdited, setLastEdited] = useState('from')
   const [history, setHistory] = useState([])
   const [isHistoryVisible, setIsHistoryVisible] = useState(false)
@@ -32,53 +32,67 @@ function UnitConverter() {
     [],
   )
 
-  useEffect(() => {
-    if (lastEdited === 'to') {
-      setFromValue(convertValue(category, toUnit, fromUnit, toValue))
-      return
-    }
-
-    setToValue(convertValue(category, fromUnit, toUnit, fromValue))
-  }, [category, fromUnit, toUnit, fromValue, toValue, lastEdited])
-
   function handleCategoryChange(nextCategory) {
     setCategory(nextCategory)
     const [first, second] = converterOptions[nextCategory]
     setFromUnit(first)
     setToUnit(second)
+    setToValue('')
+    setLastEdited('from')
   }
 
   function handleFromValueChange(nextValue) {
-    const convertedValue = convertValue(category, fromUnit, toUnit, nextValue)
-
     setLastEdited('from')
     setFromValue(nextValue)
-    setToValue(convertedValue)
-
-    if (nextValue.trim() && convertedValue !== '') {
-      appendHistory(`${nextValue} ${fromUnit}`, `${convertedValue} ${toUnit}`)
-    }
+    setToValue('')
   }
 
   function handleToValueChange(nextValue) {
-    const convertedValue = convertValue(category, toUnit, fromUnit, nextValue)
-
     setLastEdited('to')
     setToValue(nextValue)
-    setFromValue(convertedValue)
+  }
 
-    if (nextValue.trim() && convertedValue !== '') {
-      appendHistory(`${nextValue} ${toUnit}`, `${convertedValue} ${fromUnit}`)
+  function clearFromValue() {
+    setFromValue('')
+    setToValue('')
+    setLastEdited('from')
+  }
+
+  function clearToValue() {
+    setToValue('')
+    setLastEdited('to')
+  }
+
+  function handleGetResult() {
+    if (lastEdited === 'to') {
+      const convertedValue = convertValue(category, toUnit, fromUnit, toValue)
+      setFromValue(convertedValue)
+
+      if (toValue.trim() && convertedValue !== '') {
+        appendHistory(`${toValue} ${toUnit}`, `${convertedValue} ${fromUnit}`)
+      }
+
+      return
+    }
+
+    const convertedValue = convertValue(category, fromUnit, toUnit, fromValue)
+    setToValue(convertedValue)
+
+    if (fromValue.trim() && convertedValue !== '') {
+      appendHistory(`${fromValue} ${fromUnit}`, `${convertedValue} ${toUnit}`)
     }
   }
 
   function handleSwapUnits() {
-    appendHistory(`${fromValue} ${fromUnit}`, `${toValue} ${toUnit}`)
+    const previousFromUnit = fromUnit
+    const previousToUnit = toUnit
+    const previousOutput = toValue
+
+    setFromUnit(previousToUnit)
+    setToUnit(previousFromUnit)
+    setFromValue(previousOutput || fromValue)
+    setToValue('')
     setLastEdited('from')
-    setFromUnit(toUnit)
-    setToUnit(fromUnit)
-    setFromValue(toValue)
-    setToValue(fromValue)
   }
 
   function appendHistory(sourceText, resultText) {
@@ -148,8 +162,9 @@ function UnitConverter() {
                 className="unit-converter-control neumorph-btn accent-dropdown w-full rounded-xl px-3 py-2"
                 value={fromUnit}
                 onChange={(event) => {
-                  setLastEdited('from')
                   setFromUnit(event.target.value)
+                  setToValue('')
+                  setLastEdited('from')
                 }}
               >
                 {converterOptions[category].map((unit) => (
@@ -176,8 +191,9 @@ function UnitConverter() {
                 className="unit-converter-control neumorph-btn accent-dropdown w-full rounded-xl px-3 py-2"
                 value={toUnit}
                 onChange={(event) => {
-                  setLastEdited('to')
                   setToUnit(event.target.value)
+                  setToValue('')
+                  setLastEdited('from')
                 }}
               >
                 {converterOptions[category].map((unit) => (
@@ -189,25 +205,71 @@ function UnitConverter() {
             </div>
           </div>
 
-          <div className="unit-converter-values-grid md:col-span-2 grid gap-2 grid-cols-2 md:gap-3 md:grid-cols-2">
+          <div className="unit-converter-values-grid md:col-span-2 grid items-end gap-2 grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] md:gap-3 md:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]">
             <div className="space-y-2">
               <label className="unit-converter-label text-sm font-medium">Input ({fromUnit})</label>
-              <input
-                className="unit-converter-control neumorph-btn w-full rounded-xl px-3 py-2"
-                value={fromValue}
-                onChange={(event) => handleFromValueChange(event.target.value)}
-                placeholder={`Enter ${fromUnit} value`}
-              />
+              <div className="relative">
+                <input
+                  className="unit-converter-control neumorph-btn w-full rounded-xl px-3 py-2 pr-9"
+                  value={fromValue}
+                  onChange={(event) => handleFromValueChange(event.target.value)}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter') {
+                      event.preventDefault()
+                      handleGetResult()
+                    }
+                  }}
+                  placeholder={`Enter ${fromUnit} value`}
+                />
+                {fromValue && (
+                  <button
+                    type="button"
+                    className="unit-converter-clear-btn absolute right-2 top-1/2 inline-flex h-5 w-5 -translate-y-1/2 items-center justify-center rounded-full text-xs font-semibold"
+                    onClick={clearFromValue}
+                    title="Clear input"
+                    aria-label="Clear input"
+                  >
+                    ×
+                  </button>
+                )}
+              </div>
             </div>
+
+            <button
+              type="button"
+              className="unit-converter-get neumorph-btn h-11 rounded-xl px-3 text-sm font-semibold"
+              onClick={handleGetResult}
+            >
+              Get
+            </button>
 
             <div className="space-y-2">
               <label className="unit-converter-label text-sm font-medium">Output ({toUnit})</label>
-              <input
-                className="unit-converter-control neumorph-btn w-full rounded-xl px-3 py-2"
-                value={toValue}
-                onChange={(event) => handleToValueChange(event.target.value)}
-                placeholder={`Enter ${toUnit} value`}
-              />
+              <div className="relative">
+                <input
+                  className="unit-converter-control neumorph-btn w-full rounded-xl px-3 py-2 pr-9"
+                  value={toValue}
+                  onChange={(event) => handleToValueChange(event.target.value)}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter') {
+                      event.preventDefault()
+                      handleGetResult()
+                    }
+                  }}
+                  placeholder={`Enter ${toUnit} value`}
+                />
+                {toValue && (
+                  <button
+                    type="button"
+                    className="unit-converter-clear-btn absolute right-2 top-1/2 inline-flex h-5 w-5 -translate-y-1/2 items-center justify-center rounded-full text-xs font-semibold"
+                    onClick={clearToValue}
+                    title="Clear output"
+                    aria-label="Clear output"
+                  >
+                    ×
+                  </button>
+                )}
+              </div>
             </div>
           </div>
 

@@ -202,18 +202,19 @@ h4 {
   }
 
   .app-expression-input {
-    padding-top: 0.3rem !important;
-    padding-bottom: 0.3rem !important;
-    font-size: 0.84rem !important;
+    min-height: 2rem;
+    padding-top: 0.34rem !important;
+    padding-bottom: 0.34rem !important;
+    font-size: 0.88rem !important;
   }
 
   .mobile-top-row {
-    height: clamp(6.3rem, 26vh, 7.15rem);
+    height: clamp(7rem, 29vh, 8.4rem);
   }
 
   .app-display-panel {
-    padding: 0.56rem !important;
-    gap: 0.38rem;
+    padding: 0.62rem !important;
+    gap: 0.42rem;
   }
 
   .app-display-label {
@@ -231,8 +232,8 @@ h4 {
   }
 
   .app-display-result {
-    margin-top: 0.14rem;
-    font-size: 1.2rem !important;
+    margin-top: 0.16rem;
+    font-size: 1.28rem !important;
   }
 
   .app-display-action-btn {
@@ -246,17 +247,96 @@ h4 {
   }
 
   .mobile-keypad-wrap {
-    margin-top: 0.36rem !important;
+    margin-top: 0.34rem !important;
+    display: flex;
+    min-height: 0;
+  }
+
+  .mobile-keypad-wrap > .grid {
+    height: 100%;
+    width: 100%;
+  }
+
+  .mobile-keypad-wrap .grid.grid-cols-6 {
+    height: 100%;
+    width: 100%;
+    grid-auto-rows: minmax(0, 1fr);
+    align-content: stretch;
   }
 
   .calc-key-btn {
-    height: clamp(2rem, 4.1vh, 2.55rem);
-    font-size: clamp(0.74rem, 1.6vh, 0.84rem);
+    height: clamp(2.15rem, 4.8vh, 2.95rem);
+    min-height: 2.15rem;
+    font-size: clamp(0.78rem, 1.75vh, 0.9rem);
     padding-inline: 0.12rem;
   }
 
+  .mobile-keypad-wrap .grid.grid-cols-6 .calc-key-btn {
+    height: 100%;
+    min-height: 0;
+  }
+
   .calc-key-op {
-    font-size: clamp(0.95rem, 2.05vh, 1.08rem);
+    font-size: clamp(1rem, 2.2vh, 1.18rem);
+  }
+}
+
+@media (max-width: 1279px) and (min-height: 891px) {
+  .mobile-calc-shell {
+    padding: 0.56rem !important;
+  }
+
+  .app-expression-input {
+    min-height: 2.15rem;
+    font-size: 0.9rem !important;
+    padding-top: 0.36rem !important;
+    padding-bottom: 0.36rem !important;
+  }
+
+  .mobile-top-row {
+    height: clamp(8.1rem, 31vh, 10rem);
+  }
+
+  .app-display-panel {
+    padding: 0.68rem !important;
+    gap: 0.46rem;
+  }
+
+  .app-display-result {
+    font-size: 1.34rem !important;
+  }
+
+  .mobile-keypad-wrap {
+    margin-top: 0.36rem !important;
+    display: flex;
+    min-height: 0;
+  }
+
+  .mobile-keypad-wrap > .grid {
+    height: 100%;
+    width: 100%;
+  }
+
+  .mobile-keypad-wrap .grid.grid-cols-6 {
+    height: 100%;
+    width: 100%;
+    grid-auto-rows: minmax(0, 1fr);
+    align-content: stretch;
+  }
+
+  .calc-key-btn {
+    height: clamp(2.35rem, 5.1vh, 3.25rem);
+    min-height: 2.35rem;
+    font-size: clamp(0.82rem, 1.9vh, 0.98rem);
+  }
+
+  .mobile-keypad-wrap .grid.grid-cols-6 .calc-key-btn {
+    height: 100%;
+    min-height: 0;
+  }
+
+  .calc-key-op {
+    font-size: clamp(1.06rem, 2.35vh, 1.3rem);
   }
 }
 
@@ -390,6 +470,74 @@ h4 {
   }
 }
 
+@media (max-width: 1279px) and (orientation: landscape) {
+  .mobile-calc-shell {
+    padding: 0.42rem !important;
+  }
+
+  .mobile-calc-section {
+    gap: 0.35rem;
+  }
+
+  .app-expression-input {
+    min-height: 1.8rem;
+    padding-top: 0.24rem !important;
+    padding-bottom: 0.24rem !important;
+    font-size: 0.8rem !important;
+  }
+
+  .mobile-top-row {
+    height: clamp(5.1rem, 26vh, 6.2rem) !important;
+    min-height: 0;
+    margin-bottom: 0.3rem !important;
+  }
+
+  .mobile-top-row > * {
+    min-height: 0;
+  }
+
+  .app-display-panel {
+    min-height: 0;
+    overflow: hidden;
+    padding: 0.45rem !important;
+    gap: 0.28rem;
+  }
+
+  .mobile-top-row .glass-panel {
+    max-height: 100%;
+  }
+
+  .mobile-top-row .no-scrollbar {
+    min-height: 0;
+    overflow-y: auto;
+  }
+
+  .app-display-label {
+    font-size: 0.52rem;
+    letter-spacing: 0.14em;
+  }
+
+  .app-display-expression {
+    margin-top: 0.12rem;
+    font-size: 0.76rem !important;
+  }
+
+  .app-display-preview {
+    font-size: 0.58rem;
+  }
+
+  .app-display-result {
+    margin-top: 0.08rem;
+    font-size: 1.08rem !important;
+  }
+
+  .mobile-keypad-wrap {
+    margin-top: 0.3rem !important;
+    min-height: 0;
+    overflow-y: auto !important;
+  }
+}
+
 .tab-button.active {
   border-color: color-mix(in oklab, var(--accent-color) 42%, white 8%);
   background: color-mix(in oklab, var(--accent-color) 22%, transparent);
@@ -420,9 +568,46 @@ h4 {
   border-color: color-mix(in oklab, var(--accent-color) 58%, white 10%) !important;
 }
 
+.app-conditional-footer {
+  display: none;
+}
+
+@media (min-width: 1280px) {
+  .app-conditional-footer {
+    display: block;
+  }
+}
+
+@media (max-width: 1279px) and (min-height: 641px) {
+  .app-conditional-footer {
+    display: block;
+    margin-top: 0.35rem;
+    padding: 0.35rem 0.65rem;
+    font-size: 0.62rem;
+    line-height: 1.2;
+  }
+}
+
+@media (max-width: 1279px) and (max-height: 640px) {
+  .app-conditional-footer {
+    display: none;
+  }
+}
+
 .unit-converter-history-toggle {
   width: 2.6rem;
   height: 2.6rem;
+}
+
+.unit-converter-clear-btn {
+  border: 1px solid color-mix(in oklab, var(--accent-color) 22%, transparent);
+  color: var(--muted-text);
+  background: color-mix(in oklab, var(--panel-bg) 78%, transparent);
+}
+
+.unit-converter-clear-btn:hover {
+  color: var(--text-main);
+  border-color: color-mix(in oklab, var(--accent-color) 44%, transparent);
 }
 
 @media (max-width: 1279px) {
@@ -465,6 +650,12 @@ h4 {
     height: 2.2rem;
   }
 
+  .unit-converter-clear-btn {
+    height: 1.1rem;
+    width: 1.1rem;
+    font-size: 0.72rem;
+  }
+
   .unit-converter-units-grid {
     grid-template-columns: minmax(0, 1fr) 2.2rem minmax(0, 1fr) !important;
     gap: 0.45rem !important;
@@ -478,8 +669,16 @@ h4 {
   }
 
   .unit-converter-values-grid {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) !important;
     gap: 0.45rem !important;
+  }
+
+  .unit-converter-get {
+    height: 2.2rem !important;
+    min-height: 2.2rem;
+    padding: 0 0.65rem !important;
+    font-size: 0.8rem !important;
+    white-space: nowrap;
   }
 
   .unit-converter-history {
