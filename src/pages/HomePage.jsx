@@ -40,6 +40,7 @@ function HomePage() {
 
   return (
     <main className="h-dvh min-h-dvh overflow-hidden px-0 py-0 xl:min-h-screen xl:overflow-y-auto xl:px-2 xl:py-2">
+      <a className="skip-link" href="#main-content">Skip to main content</a>
       <div className="mobile-calc-frame mx-auto flex h-full min-h-0 w-full flex-col gap-0 xl:gap-1 xl:max-w-none">
         <header
           className="app-header glass-panel relative z-40 flex items-center justify-between gap-1.5 px-1.5 py-1 xl:gap-2 xl:px-2.5 xl:py-1.5"
@@ -56,7 +57,7 @@ function HomePage() {
             </div>
           </div>
 
-          <div className="flex items-center gap-1 xl:gap-1.5">
+          <nav className="flex items-center gap-1 xl:gap-1.5" aria-label="Primary navigation">
             <div className="flex items-center gap-0.5 rounded-xl border border-white/20 bg-white/10 p-0.5 xl:gap-1 dark:border-white/10 dark:bg-black/20">
               {views.map((view) => {
                 const Icon = view.icon
@@ -67,6 +68,8 @@ function HomePage() {
                     className={`tab-button ${activeView === view.id ? 'active' : ''}`}
                     onClick={() => setActiveView(view.id)}
                     type="button"
+                    aria-pressed={activeView === view.id}
+                    aria-label={view.label}
                   >
                     <Icon className="h-3 w-3 xl:h-3.5 xl:w-3.5" />
                     <span className="hidden xl:inline">{view.label}</span>
@@ -75,10 +78,11 @@ function HomePage() {
               })}
             </div>
             <ThemeControls theme={theme} onThemeChange={setTheme} accent={accent} onAccentChange={setAccent} />
-          </div>
+          </nav>
         </header>
 
         <section
+          id="main-content"
             key={activeView}
             className="flex-1 min-h-0 overflow-hidden"
           >

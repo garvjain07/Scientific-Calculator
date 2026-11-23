@@ -12,6 +12,7 @@ function HistoryPanel({ history, onReuse, onClear, onExport, compact = false, cl
             className="neumorph-btn rounded-md px-1.5 py-0.5 text-[10px]"
             onClick={onClear}
             title="Clear History"
+            aria-label="Clear calculator history"
           >
             Clear
           </button>
@@ -42,10 +43,10 @@ function HistoryPanel({ history, onReuse, onClear, onExport, compact = false, cl
       <div className="mb-3 flex items-center justify-between gap-2">
         <h3 className="text-lg font-semibold">History</h3>
         <div className="flex gap-2">
-          <button type="button" className="neumorph-btn rounded-lg p-2" onClick={onExport} title="Export CSV">
+          <button type="button" className="neumorph-btn rounded-lg p-2" onClick={onExport} title="Export CSV" aria-label="Export calculator history as CSV">
             <Download className="h-4 w-4" />
           </button>
-          <button type="button" className="neumorph-btn rounded-lg p-2" onClick={onClear} title="Clear History">
+          <button type="button" className="neumorph-btn rounded-lg p-2" onClick={onClear} title="Clear History" aria-label="Clear calculator history">
             <Eraser className="h-4 w-4" />
           </button>
         </div>

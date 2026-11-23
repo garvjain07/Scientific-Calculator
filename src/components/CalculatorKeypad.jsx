@@ -39,6 +39,7 @@ function CalculatorKeypad({ onAction }) {
       type="button"
       className={`neumorph-btn calc-key-btn rounded-md font-semibold ${extraClass} ${['+', '−', '×', '/', '%'].includes(button.label) ? 'calc-key-op font-extrabold' : ''} ${kindStyles[button.kind]}`}
       onClick={() => onAction(button)}
+      aria-label={button.label === '=' ? 'Evaluate expression' : button.label}
     >
       {button.label}
     </button>

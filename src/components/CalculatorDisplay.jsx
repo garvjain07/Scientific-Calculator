@@ -12,13 +12,13 @@ function CalculatorDisplay({ expression, preview, error, result, onCopy, classNa
           <p className="app-display-expression mt-1 wrap-break-word text-sm font-semibold sm:text-base">{expression || '0'}</p>
         </div>
         <div className="flex gap-2">
-          <button type="button" className="app-display-action-btn neumorph-btn rounded-xl p-1.5" onClick={onCopy} title="Copy Result">
+          <button type="button" className="app-display-action-btn neumorph-btn rounded-xl p-1.5" onClick={onCopy} title="Copy Result" aria-label="Copy calculator result">
             <Copy className="h-3.5 w-3.5" />
           </button>
         </div>
       </div>
 
-      <div>
+      <div aria-live="polite" aria-atomic="true">
         {error ? <p className="app-display-preview text-xs font-semibold text-red-400">{error}</p> : <p className="app-display-preview text-xs text-(--muted-text)">Preview: {preview || '-'}</p>}
         <p className="app-display-result mt-1 text-right text-xl font-bold sm:text-2xl">{result}</p>
       </div>

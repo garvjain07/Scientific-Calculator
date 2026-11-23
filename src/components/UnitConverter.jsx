@@ -117,9 +117,10 @@ function UnitConverter() {
 
           <div className="unit-converter-form mt-5 grid gap-4 md:grid-cols-2">
           <div className="space-y-2">
-            <label className="unit-converter-label text-sm font-medium">Category</label>
+            <label className="unit-converter-label text-sm font-medium" htmlFor="converter-category">Category</label>
             <div className="unit-converter-category-row grid grid-cols-[minmax(0,1fr)_auto] items-center gap-2">
               <select
+                id="converter-category"
                 className="unit-converter-control neumorph-btn accent-dropdown w-full rounded-xl px-3 py-2"
                 value={category}
                 onChange={(event) => handleCategoryChange(event.target.value)}
@@ -157,8 +158,9 @@ function UnitConverter() {
 
           <div className="unit-converter-units-grid md:col-span-2 grid items-end gap-2 grid-cols-[minmax(0,1fr)_2.5rem_minmax(0,1fr)] md:gap-3 md:grid-cols-[1fr_auto_1fr]">
             <div className="space-y-2">
-              <label className="unit-converter-label text-sm font-medium">From</label>
+              <label className="unit-converter-label text-sm font-medium" htmlFor="converter-from-unit">From</label>
               <select
+                id="converter-from-unit"
                 className="unit-converter-control neumorph-btn accent-dropdown w-full rounded-xl px-3 py-2"
                 value={fromUnit}
                 onChange={(event) => {
@@ -186,8 +188,9 @@ function UnitConverter() {
             </button>
 
             <div className="space-y-2">
-              <label className="unit-converter-label text-sm font-medium">To</label>
+              <label className="unit-converter-label text-sm font-medium" htmlFor="converter-to-unit">To</label>
               <select
+                id="converter-to-unit"
                 className="unit-converter-control neumorph-btn accent-dropdown w-full rounded-xl px-3 py-2"
                 value={toUnit}
                 onChange={(event) => {
@@ -207,9 +210,10 @@ function UnitConverter() {
 
           <div className="unit-converter-values-grid md:col-span-2 grid items-end gap-2 grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] md:gap-3 md:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]">
             <div className="space-y-2">
-              <label className="unit-converter-label text-sm font-medium">Input ({fromUnit})</label>
+              <label className="unit-converter-label text-sm font-medium" htmlFor="converter-from-value">Input ({fromUnit})</label>
               <div className="relative">
                 <input
+                  id="converter-from-value"
                   className="unit-converter-control neumorph-btn w-full rounded-xl px-3 py-2 pr-9"
                   value={fromValue}
                   onChange={(event) => handleFromValueChange(event.target.value)}
@@ -224,7 +228,7 @@ function UnitConverter() {
                 {fromValue && (
                   <button
                     type="button"
-                    className="unit-converter-clear-btn absolute right-2 top-1/2 inline-flex h-5 w-5 -translate-y-1/2 items-center justify-center rounded-full text-xs font-semibold"
+                    className="unit-converter-clear-btn absolute right-2 top-1/2 inline-flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full text-xs font-semibold"
                     onClick={clearFromValue}
                     title="Clear input"
                     aria-label="Clear input"
@@ -239,14 +243,16 @@ function UnitConverter() {
               type="button"
               className="unit-converter-get neumorph-btn h-11 rounded-xl px-3 text-sm font-semibold"
               onClick={handleGetResult}
+              aria-label="Convert values"
             >
               Get
             </button>
 
             <div className="space-y-2">
-              <label className="unit-converter-label text-sm font-medium">Output ({toUnit})</label>
+              <label className="unit-converter-label text-sm font-medium" htmlFor="converter-to-value">Output ({toUnit})</label>
               <div className="relative">
                 <input
+                  id="converter-to-value"
                   className="unit-converter-control neumorph-btn w-full rounded-xl px-3 py-2 pr-9"
                   value={toValue}
                   onChange={(event) => handleToValueChange(event.target.value)}
@@ -261,7 +267,7 @@ function UnitConverter() {
                 {toValue && (
                   <button
                     type="button"
-                    className="unit-converter-clear-btn absolute right-2 top-1/2 inline-flex h-5 w-5 -translate-y-1/2 items-center justify-center rounded-full text-xs font-semibold"
+                    className="unit-converter-clear-btn absolute right-2 top-1/2 inline-flex h-8 w-8 -translate-y-1/2 items-center justify-center rounded-full text-xs font-semibold"
                     onClick={clearToValue}
                     title="Clear output"
                     aria-label="Clear output"

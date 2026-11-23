@@ -139,7 +139,9 @@ function CalculatorPanel() {
           <div className="mb-1.5">
             <input
               ref={inputRef}
+              id="calculator-expression"
               className="app-expression-input neumorph-btn w-full rounded-xl px-3 py-1 text-sm sm:text-base"
+              aria-label="Calculator expression"
               placeholder="Type expression like 2+3*sin(45)"
               value={state.expression}
               onChange={(event) => setExpression(event.target.value)}

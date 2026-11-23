@@ -63,6 +63,7 @@ function ThemeControls({ theme, onThemeChange, accent, onAccentChange }) {
                 className={`h-4 w-4 rounded-full border ${accent === color ? 'border-white ring-1 ring-black/35 dark:ring-white/35' : 'border-transparent'}`}
                 style={{ backgroundColor: color }}
                 title={`Accent ${color}`}
+                aria-label={`Use accent color ${color}`}
               />
             ))}
           </div>
