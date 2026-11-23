@@ -1,11 +1,11 @@
-import { useEffect, useMemo, useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { lazy, Suspense, useEffect, useMemo, useState } from 'react'
 import { ArrowLeftRight, Calculator } from 'lucide-react'
 import brandLogo from '../assets/logo.jpg'
 import CalculatorPanel from '../components/CalculatorPanel'
 import ThemeControls from '../components/ThemeControls'
-import UnitConverter from '../components/UnitConverter'
 import { getSavedPreference, savePreference } from '../services/storageService'
+
+const UnitConverter = lazy(() => import('../components/UnitConverter'))
 
 const views = [
   { id: 'calculator', label: 'Calculator', icon: Calculator },
@@ -28,7 +28,11 @@ function HomePage() {
 
   const activeContent = useMemo(() => {
     if (activeView === 'converter') {
-      return <UnitConverter />
+      return (
+        <Suspense fallback={<section className="glass-panel p-4">Loading converter...</section>}>
+          <UnitConverter />
+        </Suspense>
+      )
     }
 
     return <CalculatorPanel />
@@ -37,11 +41,8 @@ function HomePage() {
   return (
     <main className="h-dvh min-h-dvh overflow-hidden px-0 py-0 xl:min-h-screen xl:overflow-y-auto xl:px-2 xl:py-2">
       <div className="mobile-calc-frame mx-auto flex h-full min-h-0 w-full flex-col gap-0 xl:gap-1 xl:max-w-none">
-        <motion.header
+        <header
           className="app-header glass-panel relative z-40 flex items-center justify-between gap-1.5 px-1.5 py-1 xl:gap-2 xl:px-2.5 xl:py-1.5"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.45 }}
         >
           <div className="flex min-w-0 items-center gap-1.5 xl:gap-2">
             <img
@@ -75,20 +76,14 @@ function HomePage() {
             </div>
             <ThemeControls theme={theme} onThemeChange={setTheme} accent={accent} onAccentChange={setAccent} />
           </div>
-        </motion.header>
+        </header>
 
-        <AnimatePresence mode="wait">
-          <motion.section
+        <section
             key={activeView}
             className="flex-1 min-h-0 overflow-hidden"
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.3 }}
           >
             {activeContent}
-          </motion.section>
-        </AnimatePresence>
+        </section>
 
         <footer className="app-conditional-footer glass-panel hidden px-3 py-1.5 text-center text-xs text-(--muted-text)">
           <p>

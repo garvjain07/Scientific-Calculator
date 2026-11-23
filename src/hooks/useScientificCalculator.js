@@ -164,7 +164,22 @@ export function useScientificCalculator() {
 
       if (event.key === 'Enter') {
         event.preventDefault()
-        evaluateCurrent()
+        const evaluated = evaluateExpression(state.expression || state.result, state.angleMode)
+        if (!evaluated.ok) {
+          dispatch({ type: 'SET_ERROR', payload: evaluated.error })
+        } else {
+          const id = globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(36).slice(2)}`
+          dispatch({ type: 'EVALUATE_SUCCESS', payload: evaluated.value })
+          dispatch({
+            type: 'PUSH_HISTORY',
+            payload: {
+              id,
+              expression: state.expression || state.result,
+              result: evaluated.value,
+              timestamp: new Date().toLocaleString(),
+            },
+          })
+        }
         return
       }
 
@@ -188,7 +203,7 @@ export function useScientificCalculator() {
     return () => {
       window.removeEventListener('keydown', handleKeyDown)
     }
-  }, [state.expression, state.angleMode])
+  }, [state.expression, state.angleMode, state.result])
 
   // Runs expression parsing and pushes successful calculations into history.
   function evaluateCurrent() {
@@ -200,7 +215,7 @@ export function useScientificCalculator() {
     }
 
     const historyItem = {
-      id: crypto.randomUUID(),
+      id: globalThis.crypto?.randomUUID?.() ?? `${Date.now()}-${Math.random().toString(36).slice(2)}`,
       expression: expressionToEvaluate,
       result: evaluated.value,
       timestamp: new Date().toLocaleString(),

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import { RotateCcw } from 'lucide-react'
 import { exportHistoryAsCsv } from '../services/csvService'
 import { useScientificCalculator } from '../hooks/useScientificCalculator'
@@ -23,11 +23,6 @@ function CalculatorPanel() {
     runMemory,
     clearHistory,
   } = useScientificCalculator()
-
-  // Keep history hidden by default after reloads/hot updates.
-  useEffect(() => {
-    setIsHistoryVisible(false)
-  }, [])
 
   const syncCaret = useCallback(() => {
     const input = inputRef.current

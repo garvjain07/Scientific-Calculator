@@ -1,13 +1,10 @@
-import { motion } from 'framer-motion'
 import { Copy } from 'lucide-react'
 
 // Shows expression, result preview, and quick actions.
 function CalculatorDisplay({ expression, preview, error, result, onCopy, className = '' }) {
   return (
-    <motion.section
+    <section
       className={`app-display-panel glass-panel flex min-h-24 flex-col justify-between gap-1.5 p-2.5 ${className}`.trim()}
-      initial={{ opacity: 0, y: 8 }}
-      animate={{ opacity: 1, y: 0 }}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="max-w-[80%]">
@@ -25,7 +22,7 @@ function CalculatorDisplay({ expression, preview, error, result, onCopy, classNa
         {error ? <p className="app-display-preview text-xs font-semibold text-red-400">{error}</p> : <p className="app-display-preview text-xs text-(--muted-text)">Preview: {preview || '-'}</p>}
         <p className="app-display-result mt-1 text-right text-xl font-bold sm:text-2xl">{result}</p>
       </div>
-    </motion.section>
+    </section>
   )
 }
 

@@ -1,4 +1,3 @@
-import { motion } from 'framer-motion'
 import { basicPadRows, scientificButtons } from '../utils/constants'
 
 const kindStyles = {
@@ -35,15 +34,14 @@ function CalculatorKeypad({ onAction }) {
   ]
 
   const renderButton = (button, key, extraClass = '') => (
-    <motion.button
+    <button
       key={key}
       type="button"
       className={`neumorph-btn calc-key-btn rounded-md font-semibold ${extraClass} ${['+', '−', '×', '/', '%'].includes(button.label) ? 'calc-key-op font-extrabold' : ''} ${kindStyles[button.kind]}`}
       onClick={() => onAction(button)}
-      whileTap={{ scale: 0.96 }}
     >
       {button.label}
-    </motion.button>
+    </button>
   )
 
   const renderRow = (row, rowIndex, prefix) =>

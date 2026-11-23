@@ -1,14 +1,12 @@
 # Advanced Scientific Calculator Web Application
 
-Modern scientific calculator built with React and Tailwind on Vite, featuring scientific operations, expression parsing, graph plotting, memory controls, history management, CSV export, and a real-time unit converter.
+Modern scientific calculator built with React and Tailwind on Vite, featuring scientific operations, expression parsing, memory controls, history management, CSV export, and a real-time unit converter.
 
 ## Tech Stack
 
 - React 19 + Vite 8
 - Tailwind CSS 4
-- Framer Motion
-- math.js
-- Chart.js + react-chartjs-2 + chartjs-plugin-zoom
+- Local, dependency-light expression parser
 
 ## Features
 
@@ -20,14 +18,13 @@ Modern scientific calculator built with React and Tailwind on Vite, featuring sc
 - Calculation history with reuse, clear, and CSV export
 - Result copy to clipboard
 - Keyboard support: Enter, Escape, Backspace, number/operator keys
-- Optional voice input using browser speech recognition
-- Graphing mode with function plotting, zoom, and pan
 - Unit converter for length, weight, and temperature
 - Dark/Light mode and custom accent colors
 - Glassmorphism + neumorphism responsive UI
 
 ## Folder Structure
 
+```text
 src/
 	components/
 	hooks/
@@ -35,17 +32,24 @@ src/
 	services/
 	styles/
 	utils/
+```
 
 ## Run Locally
 
+```bash
 npm install
 npm run dev
+```
 
 ## Build
 
+```bash
 npm run build
+npm run preview
+```
 
 ## Notes
 
-- Voice input depends on browser SpeechRecognition support.
-- History and UI preferences are stored in localStorage.
+- History and UI preferences are stored only in localStorage in the browser.
+- Expressions are parsed with a restricted evaluator; arbitrary JavaScript and property access are not supported.
+- CSV exports escape spreadsheet formula prefixes to reduce formula-injection risk.
